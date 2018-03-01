@@ -1,18 +1,12 @@
-nginx:
-    build: ./nginx
-    links:
-        - cnkj:cnkj
-    ports:
-        - "80:80"
-
-cnkj:
-    build: ./cnkj
-    links:
-        - postgres
-    ports:
-        - "5000"
-
-postgres:
-    build: ./postgres
-    ports:
-        - "5432"
+version: "3"
+services:
+    nginx:
+        build: ./nginx
+        links:
+           - cnkj:cnkj
+        ports:
+           - "80:80"
+    cnkj:
+        build: ./cnkj
+        ports:
+            - "5000"

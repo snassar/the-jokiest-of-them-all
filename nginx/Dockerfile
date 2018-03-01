@@ -92,6 +92,10 @@ RUN set -x \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
+RUN rm -v /etc/nginx/nginx.conf
+
+COPY nginx.conf /etc/nginx/
+
 EXPOSE 80
 
 STOPSIGNAL SIGTERM
