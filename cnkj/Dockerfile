@@ -6,6 +6,7 @@ RUN apt install -y vim curl dialog net-tools build-essential python3 python3-dev
 
 RUN pip3 install flask
 RUN pip3 install flask-sqlalchemy
+RUN pip3 install jinja2
 
 RUN sqlite3 /var/www/cnkj.db
 
