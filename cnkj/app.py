@@ -37,23 +37,22 @@ def home():
 
 @app.route('/5')
 def show_joke():
-
     return render_template("5.html")
 
 @app.route('/ranking')
-def show_joke_rankings():
+def show_joke_ranking():
     return render_template("ranking.html")
 
 @app.route('/ranking/kicks-like-chuck-norris')
-def show_joke_rankings():
+def show_strong_jokes():
     return render_template("strong.html")
 
 @app.route('/ranking/kicks-like-van-damme')
-def show_joke_rankings():
+def show_weak_jokes():
     return render_template("weak.html")
 
 @app.route('/random')
-def random_joke():
+def show_random_joke():
      return render_template("random.html")
 
 if __name__ == '__main__':
