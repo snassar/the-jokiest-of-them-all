@@ -1,112 +1,60 @@
-from flask import Flask, jsonify, url_for, abort, request
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, Text, Table, create_engine, MetaData
-from datetime import datetime
 import os
 
+from flask import Flask, render_template, request, jsonify, url_for, abort, request
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, Integer, Text, Table, create_engine, MetaData
+from  sqlalchemy.sql.expression import func, select
+from datetime import datetime
+
+project_dir = os.path.dirname(os.path.abspath(__file__))
+database_file = "sqlite:///{}".format(os.path.join(project_dir, "cnkj.db"))
+
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 
-engine = create_engine('sqlite:////tmp/test.db', convert_unicode=True)
-metadata = MetaData(bind=engine)
+db = SQLAlchemy(app)
 
-jokes = Table('jokes', metadata, autoload=True)
-con = engine.connect()
-con.execute(jokes.insert(), id='1', joke='Chuck Norris has two speeds: Walk and Kill.')
+class Joke(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    joke = db.Column(db.String(256), unique=True, nullable=False, primary_key=True)
+
+    def __repr__(self):
+        return "<Joke: {}>".format(self.joke)
+
+    def show_id(self):
+        return "<ID: {}>".format(self.id)
+
+class Rating(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        return "<Rating: {}>".format(self.rating)
 
 @app.route('/')
-def list_jokes():
+def home():
+    return render_template("index.html")
 
-#    cursor.execute("show tables;")
-    data = Jser.query.all()
-    res = jsonify(data)
-    return res
+@app.route('/5')
+def show_joke():
 
-#    return '''
-#<html>
-#    <head>
-#        <title>CNKJ</title>
-#    </head>
-#    <body>
-#        <h1>CNKJ</h1>
-#    </body>
-#</html>
-#'''
+    return render_template("5.html")
 
-@app.route('/<joke_id>')
-def show_joke(joke_id):
-
-    if not joke_id:
-        abort(404)
-
-#    cursor.execute("show tables;")
-#    data = cursor.fetchone()
-#
-#    res = jsonify(data)
-#    return res
-
-@app.route('/tags')
-def list_tags():
-
-#    cursor.execute("show tables;")
-#    data = cursor.fetchall()
-#
-#    res = jsonify(data)
-#    return res
-
-    return '''
-<html>
-    <head>
-        <title>CNKJ - Tags</title>
-    </head>
-    <body>
-        <h1>TAGS</h1>
-    </body>
-</html>
-'''
-
-@app.route('/rankings')
+@app.route('/ranking')
 def show_joke_rankings():
+    return render_template("ranking.html")
 
-#    cursor.execute("show tables;")
-#    data = cursor.fetchall()
-#
-#    res = jsonify(data)
-#    return res
+@app.route('/ranking/kicks-like-chuck-norris')
+def show_joke_rankings():
+    return render_template("strong.html")
 
-    return '''
-<html>
-    <head>
-        <title>CNKJ - Ranking</title>
-    </head>
-    <body>
-        <h1>Ranking</h1>
-    </body>
-</html>
-'''
+@app.route('/ranking/kicks-like-van-damme')
+def show_joke_rankings():
+    return render_template("weak.html")
 
 @app.route('/random')
 def random_joke():
-
-#    cursor.execute("show tables;")
-#    data = cursor.fetchall()
-#
-#    res = jsonify(data)
-#    return res
-
-    return '''
-<html>
-    <head>
-        <title>CNKJ - Random</title>
-    </head>
-    <body>
-        <h1>Random</h1>
-    </body>
-</html>
-'''
-
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db_session.remove()
+     return render_template("random.html")
 
 if __name__ == '__main__':
     app.run("0.0.0.0", 5000)

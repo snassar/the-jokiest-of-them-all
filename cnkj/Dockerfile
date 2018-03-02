@@ -7,8 +7,7 @@ RUN apt install -y vim curl dialog net-tools build-essential python3 python3-dev
 RUN pip3 install flask
 RUN pip3 install flask-sqlalchemy
 
-#COPY schema.sql /var/www
-#RUN sqlite3 /tmp/flaskr.db < /var/www/schema.sql
+RUN sqlite3 /var/www/cnkj.db
 
 WORKDIR /var/www
 
